@@ -1,0 +1,49 @@
+﻿@model IEnumerable<string>
+@{
+    ViewBag.Title = "Index";
+}
+
+@section styles
+{ 
+@Styles.Render("~/Content/Index.css")
+}
+
+ <blockquote class="blockquote-reverse">
+    <div class="row">
+        <div class="col-sm-3">
+            <h4 class="text-muted">Номер</h4>
+            @Html.DropDownList("busNumber",new SelectList(Model),"",new {@class="form-control",onchange="selectNumber();"})      
+        </div>
+         <div class="col-sm-3">
+            <h4 class="text-muted">Остановка</h4>
+            @Html.DropDownList("stopName", new SelectList(new List<string>()),"", new { @class = "form-control", onchange="selectAll(); selectStop();" })     
+        </div>
+        <div class="col-sm-3">
+            <h4 class="text-muted">Конечная</h4>
+            @Html.DropDownList("endStop",new SelectList(new List<string>()),"",new {@class="form-control", onchange="selectAll(); selectFinalStop();"})      
+        </div>
+        <div class="col-sm-3">
+            <h4 class="text-muted">Дни</h4>
+            @Html.DropDownList("days",new SelectList(new List<string>()),"",new {@class="form-control",onchange="selectAll();"})      
+        </div>
+    </div>
+</blockquote>
+<hr />
+<div class="row">
+    <blockquote id="stopsContainer" hidden>
+        <h3>Расписание:</h3>
+        <h3 id="nodes"></h3>
+    </blockquote>
+</div>
+
+<div class="row">
+    <blockquote class="blockquote-reverse" id="otherBusContainer" hidden>
+        <h4>Другие автобусы на этой остановке:</h4>
+        <h4 id="otherBuses"></h4>
+    </blockquote>
+</div>
+
+@section Scripts
+{
+    @Scripts.Render("~/Scripts/Index.js")
+}
