@@ -68,3 +68,10 @@ hr
 {
     margin:8px;
 }
+
+#loadImg{position:absolute; z-index:1000; display:none; left:50%; top:50% }
+#loadBackground
+{
+    position:absolute; z-index:999; display:none;
+    background-color:RGBA(148,148,148,0.25);
+}

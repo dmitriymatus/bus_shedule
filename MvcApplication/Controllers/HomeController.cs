@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Domain.Abstract;
+using MvcApplication.Models;
+using System.Threading;
 
 namespace MvcApplication.Controllers
 {
@@ -19,7 +21,8 @@ namespace MvcApplication.Controllers
        {
           //получение номеров автобусов
           IEnumerable<string> buses = repository.Stops.OrderBy(x => x.Id).GroupBy(x => x.busNumber).Select(group => group.First().busNumber).ToList();
-          return View(buses);
+          HomeIndexViewModel model = new HomeIndexViewModel { busNumber = buses, stopName = new List<string>(), endStop = new List<string>(), days = new List<string>() };
+          return View(model);
        }
 
        public JsonResult getStopsNames(string busNumber)

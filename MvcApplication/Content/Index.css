@@ -3,3 +3,11 @@
 {
     margin-top:0px;
 }
+
+
+#stopsContainer h3:first-child
+{
+    color:RGB(22, 141, 226);
+    text-align:left;
+    margin-top:5px;
+}

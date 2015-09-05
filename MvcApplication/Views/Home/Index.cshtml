@@ -1,4 +1,4 @@
-﻿@model IEnumerable<string>
+﻿@model MvcApplication.Models.HomeIndexViewModel
 @{
     ViewBag.Title = "Index";
 }
@@ -12,19 +12,19 @@
     <div class="row">
         <div class="col-sm-3">
             <h4 class="text-muted">Номер</h4>
-            @Html.DropDownList("busNumber",new SelectList(Model),"",new {@class="form-control",onchange="selectNumber();"})      
+                @Html.DropDownList("busNumber",new SelectList(Model.busNumber),"",new {@class="form-control",onchange="selectNumber();"})      
         </div>
          <div class="col-sm-3">
             <h4 class="text-muted">Остановка</h4>
-            @Html.DropDownList("stopName", new SelectList(new List<string>()),"", new { @class = "form-control", onchange="selectAll(); selectStop();" })     
+            @Html.DropDownList("stopName", new SelectList(Model.stopName),"", new { @class = "form-control", onchange="selectAll(); selectStop();" })     
         </div>
         <div class="col-sm-3">
             <h4 class="text-muted">Конечная</h4>
-            @Html.DropDownList("endStop",new SelectList(new List<string>()),"",new {@class="form-control", onchange="selectAll(); selectFinalStop();"})      
+            @Html.DropDownList("endStop",new SelectList(Model.endStop),"",new {@class="form-control", onchange="selectAll(); selectFinalStop();"})      
         </div>
         <div class="col-sm-3">
             <h4 class="text-muted">Дни</h4>
-            @Html.DropDownList("days",new SelectList(new List<string>()),"",new {@class="form-control",onchange="selectAll();"})      
+            @Html.DropDownList("days",new SelectList(Model.days),"",new {@class="form-control",onchange="selectAll();"})      
         </div>
     </div>
 </blockquote>

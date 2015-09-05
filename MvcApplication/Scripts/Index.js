@@ -5,6 +5,7 @@ function selectNumber()
 {
     var busNumber = document.getElementById("busNumber");
     if (busNumber.value != "") {
+        startLoadingAnimation();
         $("#nodes").text("");
         $.getJSON("/Home/getStopsNames" + "?busNumber=" + encodeURIComponent(busNumber.value), null, getData);
     }
@@ -13,11 +14,11 @@ function selectNumber()
         $("#stopName").text("");
         $("#endStop").text("");
         $("#days").text("");
-        if (document.getElementById("busContainer").hasAttribute("hidden") != true) {
-            document.getElementById("busContainer").setAttribute("hidden", "")
+        if (document.getElementById("otherBusContainer").hasAttribute("hidden") != true) {
+            document.getElementById("otherBusContainer").setAttribute("hidden", "")
         }
-        if (document.getElementById("nodesContainer").hasAttribute("hidden") != true) {
-            document.getElementById("nodesContainer").setAttribute("hidden", "")
+        if (document.getElementById("stopsContainer").hasAttribute("hidden") != true) {
+            document.getElementById("stopsContainer").setAttribute("hidden", "")
         }
     }
 }
@@ -36,6 +37,7 @@ function getData(result) {
         document.getElementById("otherBusContainer").setAttribute("hidden");
     }
     $.each(result.Stops, function (i) { $("#stopName").append("<option>" + this + "</option>") })
+    stopLoadingAnimation();
     //$.each(result.Days, function (i) { $("#days").append("<option>" + this + "</option>") })
 }
 
@@ -47,6 +49,7 @@ function selectAll() {
     var days = document.getElementById("days");
 
     if (busNumber.value != "" & stopName.value != "" & endStopName.value != "" & days.value != "") {
+        startLoadingAnimation();
         $.getJSON("/Home/getStops" + "?busNumber=" + encodeURIComponent(busNumber.value) + "&stopName=" + encodeURIComponent(stopName.value) + "&endStopName=" + encodeURIComponent(endStopName.value) + "&days=" + encodeURIComponent(days.value), null, GetNodes);
         if (document.getElementById("stopsContainer").hasAttribute("hidden") == true) {
             document.getElementById("stopsContainer").removeAttribute("hidden");
@@ -69,6 +72,7 @@ function GetNodes(nodes) {
     else {
         $("#nodes").append("<span class='breaks'> Нет рейсов</span>")
     }
+    stopLoadingAnimation();
 }
 
 //-----------------------------------------------------------------------------------------------
@@ -78,6 +82,7 @@ function selectStop() {
     var stopName = document.getElementById("stopName");
     var busNumber = document.getElementById("busNumber");
     if (stopName.value != "") {
+        startLoadingAnimation();
         $.getJSON("/Home/GetOtherBuses" + "?stopName=" + encodeURIComponent(stopName.value) + "&busNumber=" + encodeURIComponent(busNumber.value), null, GetOtherBuses);
         $.getJSON("/Home/GetFinalStops" + "?stopName=" + encodeURIComponent(stopName.value) + "&busNumber=" + encodeURIComponent(busNumber.value), null, GetFinalStops);
     }
@@ -93,6 +98,7 @@ function GetFinalStops(stops) {
     $("#endStop").text("");
     $("#endStop").append("<option>" + "</option>")
     $.each(stops, function (i) { $("#endStop").append("<option>" + this + "</option>") })
+    stopLoadingAnimation();
 }
 
 
@@ -123,10 +129,14 @@ function GetOtherBuses(buses) {
 
 function selectFinalStop()
 {
+    if (document.getElementById("endStop").value != "")
+    {
+    startLoadingAnimation();
     var stopName = document.getElementById("stopName");
     var busNumber = document.getElementById("busNumber");
     var finalStopName = document.getElementById("endStop");
     $.getJSON("/Home/GetDays" + "?stopName=" + encodeURIComponent(stopName.value) + "&busNumber=" + encodeURIComponent(busNumber.value) + "&endStop=" + encodeURIComponent(finalStopName.value), null, GetDays);
+    }
 }
 
 
@@ -136,12 +146,14 @@ function GetDays(days)
     $("#days").text("");
     $("#days").append("<option>" + "</option>")
     $.each(days, function (i) { $("#days").append("<option>" + this + "</option>") })
+    stopLoadingAnimation();
 }
 //---------------------------------------------------------------------------
 
 
 //обработчик выбора другого автобуса на этой остановке
 function selectOtherBusOnThisStop(_busNumber) {
+    startLoadingAnimation();
     var val = this.value;
     $.getJSON("/Home/getBreaksNames" + "?busNumber=" + encodeURIComponent(_busNumber), null, GetNewData);
     var busNumber = document.getElementById("busNumber");
@@ -178,5 +190,39 @@ function GetNewData(result) {
             ttt.options.selectedIndex = i;
         }
     }
+    stopLoadingAnimation();
     selectStop();
+    
+}
+
+
+
+//------------------------------------------------------------------------------------
+function startLoadingAnimation() // - функция запуска анимации
+{
+    var imgObj = $("#loadImg");
+    var jumbotron = $(".jumbotron");
+    var imgBackground = $("#loadBackground");
+  
+    var position = jumbotron.position();
+    var jumboHeight = jumbotron.outerHeight(false);
+    var jumboWidth = jumbotron.outerWidth(false);
+    imgBackground.css("top", position.top+"px");
+    imgBackground.css("left", position.left + "px");
+    imgBackground.height(jumboHeight);
+    imgBackground.width(jumboWidth);
+
+
+    var centerY = position.top + ((jumboHeight / 2 - imgObj.height() / 2));
+    var centerX = position.left + ((jumboWidth / 2 - imgObj.width() / 2));
+    imgObj.css("top", centerY + "px");
+    imgObj.css("left", centerX + "px");
+    imgBackground.show(400);
+    imgObj.show(400);
+}
+ 
+function stopLoadingAnimation() // - функция останавливающая анимацию
+{
+    $("#loadImg").hide(400);
+    $("#loadBackground").hide(400);
 }
