@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Domain.Abstract;
 using Domain.Concrete;
+using Domain.Models;
 using MvcApplication.Models;
 using System.IO;
 
@@ -44,10 +45,11 @@ namespace MvcApplication.Controllers
                  try
                  {
                     var fileName = this.HttpContext.Request.MapPath("~/Content/shedule.xls");
-                   
-
                     file.SaveAs(fileName);
-                    var answer = SheduleCreator.Create(fileName);
+
+                    IEnumerable<busStop> answer = SheduleCreator.Create(fileName);
+                    repository.DeleteAll();
+                    repository.AddStops(answer);
                     ViewBag.Success = "Расписание добавлено";
                  }
                  catch

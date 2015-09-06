@@ -14,5 +14,7 @@ namespace Domain.Abstract
       IEnumerable<string> getFinalStops(string stopName, string busNumber);
       IEnumerable<string> getDays(string stopName, string busNumber, string endStop);
       IEnumerable<string> getItems(string stopName, string busNumber, string endStop, string days);
+      void AddStops(IEnumerable<busStop> stops);
+      void DeleteAll();
    }
 }

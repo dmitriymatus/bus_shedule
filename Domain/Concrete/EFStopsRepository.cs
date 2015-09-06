@@ -48,5 +48,26 @@ namespace Domain.Concrete
          }
          return result;
       }
+
+      public void AddStops(IEnumerable<busStop> stops)
+      {
+         foreach(busStop item in stops)
+         {
+            if (item != null)
+            {
+               context.Stops.Add(item);
+            }
+         }
+         context.SaveChanges();
+      }
+
+      public void DeleteAll()
+      {
+         IEnumerable<busStop> stops = context.Stops;
+         context.Stops.RemoveRange(stops);
+         context.SaveChanges();
+      }
+
+
    }
 }
