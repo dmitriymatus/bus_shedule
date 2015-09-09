@@ -24,7 +24,7 @@ namespace MvcApplication.Controllers
           HomeIndexViewModel model = new HomeIndexViewModel { busNumber = buses, stopName = new List<string>(), endStop = new List<string>(), days = new List<string>() };
           return View(model);
        }
-
+       [OutputCache(Duration = 1, NoStore = true)]
        public JsonResult getStopsNames(string busNumber)
        {
           IEnumerable<string> stops;
@@ -33,7 +33,7 @@ namespace MvcApplication.Controllers
           var result = new { Stops = stops};          
           return Json(result, JsonRequestBehavior.AllowGet);
        }
-
+       [OutputCache(Duration = 1, NoStore = true)]
        public JsonResult GetFinalStops(string stopName, string busNumber)
        {
           //получение конечных остановок
@@ -41,19 +41,27 @@ namespace MvcApplication.Controllers
           return Json(result, JsonRequestBehavior.AllowGet);
        }
 
-
+       [OutputCache(Duration = 1, NoStore = true)]
        public JsonResult GetDays(string stopName, string busNumber, string endStop)
        {
           //получение дней
           IEnumerable<string> result = repository.getDays(stopName, busNumber, endStop);
           return Json(result, JsonRequestBehavior.AllowGet);
        }
-
+       [OutputCache(Duration = 1, NoStore = true)]
        public JsonResult getStops(string busNumber, string stopName, string endStopName, string days)
        {
 
-          //получение дней
+          //получение времени остановок
           IEnumerable<string> result = repository.getItems(stopName, busNumber, endStopName, days);
+          return Json(result, JsonRequestBehavior.AllowGet);
+       }
+
+       public JsonResult GetOtherBuses(string stopName, string busNumber)
+       {
+          //получение других автобусов на этой остановке
+
+          IEnumerable<string> result = repository.getOtherBuses(stopName, busNumber);
           return Json(result, JsonRequestBehavior.AllowGet);
        }
     }

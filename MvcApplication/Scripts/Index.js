@@ -79,6 +79,10 @@ function GetNodes(nodes) {
 
 //обработчик события выбора остановки
 function selectStop() {
+    $("#endStop").text("");
+    $("#endStop").append("<option>" + "</option>")
+    $("#days").text("");
+    $("#days").append("<option>" + "</option>")
     var stopName = document.getElementById("stopName");
     var busNumber = document.getElementById("busNumber");
     if (stopName.value != "") {
@@ -87,8 +91,8 @@ function selectStop() {
         $.getJSON("/Home/GetFinalStops" + "?stopName=" + encodeURIComponent(stopName.value) + "&busNumber=" + encodeURIComponent(busNumber.value), null, GetFinalStops);
     }
     else {
-        if (document.getElementById("busContainer").hasAttribute("hidden") == false) {
-            document.getElementById("busContainer").setAttribute("hidden", "")
+        if (document.getElementById("otherBusContainer").hasAttribute("hidden") == false) {
+            document.getElementById("otherBusContainer").setAttribute("hidden", "")
         }
     }
 }
@@ -137,6 +141,11 @@ function selectFinalStop()
     var finalStopName = document.getElementById("endStop");
     $.getJSON("/Home/GetDays" + "?stopName=" + encodeURIComponent(stopName.value) + "&busNumber=" + encodeURIComponent(busNumber.value) + "&endStop=" + encodeURIComponent(finalStopName.value), null, GetDays);
     }
+    else
+    {
+        $("#days").text("");
+        $("#days").append("<option>" + "</option>")
+    }
 }
 
 
@@ -155,10 +164,10 @@ function GetDays(days)
 function selectOtherBusOnThisStop(_busNumber) {
     startLoadingAnimation();
     var val = this.value;
-    $.getJSON("/Home/getBreaksNames" + "?busNumber=" + encodeURIComponent(_busNumber), null, GetNewData);
+    $.getJSON("/Home/getStopsNames" + "?busNumber=" + encodeURIComponent(_busNumber), null, GetNewData);
     var busNumber = document.getElementById("busNumber");
     for (i = 0; i < busNumber.length; i++) {
-        if (busNumber.options[i].value == busNumber) {
+        if (busNumber.options[i].value == _busNumber) {
             busNumber.options.selectedIndex = i;
         }
     }
@@ -174,15 +183,13 @@ function GetNewData(result) {
     $("#endStop").append("<option>" + "</option>")
     $("#days").text("");
     $("#days").append("<option>" + "</option>")
-    if (document.getElementById("nodesContainer").hasAttribute("hidden") != true) {
-        document.getElementById("nodesContainer").setAttribute("hidden", "")
+    if (document.getElementById("stopsContainer").hasAttribute("hidden") != true) {
+        document.getElementById("stopsContainer").setAttribute("hidden", "")
     }
-    if (document.getElementById("busContainer").hasAttribute("hidden") != true) {
-        document.getElementById("busContainer").setAttribute("hidden", "")
+    if (document.getElementById("otherBusContainer").hasAttribute("hidden") != true) {
+        document.getElementById("otherBusContainer").setAttribute("hidden", "")
     }
     $.each(result.Stops, function (i) { $("#stopName").append("<option>" + this + "</option>") })
-    //$.each(result.FinalBreak, function (i) { $("#endStop").append("<option>" + this + "</option>") })
-    //$.each(result.Days, function (i) { $("#days").append("<option>" + this + "</option>") })
     var ttt = document.getElementById("stopName");
     for (i = 0; i < ttt.length; i++) {
         var eee = ttt.options[i].value;

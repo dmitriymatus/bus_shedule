@@ -1,6 +1,6 @@
 ﻿@model MvcApplication.Models.HomeIndexViewModel
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Delete";
 }
 
 @section styles
@@ -8,6 +8,11 @@
 @Styles.Render("~/Content/Index.css")
 }
 
+<p class="bg-success">@TempData["Success"]</p>
+<p class="bg-danger">@TempData["Erors"]</p>
+
+@using (Html.BeginForm())
+{
  <blockquote class="blockquote-reverse">
     <div class="row">
         <div class="col-sm-3">
@@ -16,11 +21,11 @@
         </div>
          <div class="col-sm-3">
             <h4 class="text-muted">Остановка</h4>
-            @Html.DropDownList("stopName", new SelectList(Model.stopName),"", new { @class = "form-control", onchange=" selectStop(); selectAll(); " })     
+            @Html.DropDownList("stopName", new SelectList(Model.stopName),"", new { @class = "form-control", onchange="selectStop(); selectAll() " })     
         </div>
         <div class="col-sm-3">
-            <h4 class="text-muted">Направление</h4>
-            @Html.DropDownList("endStop",new SelectList(Model.endStop),"",new {@class="form-control", onchange="selectFinalStop(); selectAll(); "})      
+            <h4 class="text-muted">Конечная</h4>
+            @Html.DropDownList("finalStop",new SelectList(Model.endStop),"",new {@class="form-control", onchange="selectendStop(); selectAll(); "})      
         </div>
         <div class="col-sm-3">
             <h4 class="text-muted">Дни</h4>
@@ -29,21 +34,17 @@
     </div>
 </blockquote>
 <hr />
-<blockquote id="stopsContainer" hidden>
-    <div class="row">
-        <h3>Расписание:</h3>
-        <h3 id="nodes"></h3>
-    </div>
-</blockquote>
+<div class="row">
+    <blockquote id="stopsContainer" hidden>
+        <h4 class="text-muted">Расписание:</h4>
+        <h4 id="stops"></h4>
+        <br />
+        <button type="submit" class="btn btn-success">Удалить</button>
+    </blockquote>
+</div>
 
-<blockquote class="blockquote-reverse" id="otherBusContainer" hidden>
-    <div class="row">
-        <h4>Другие автобусы на этой остановке:</h4>
-        <h4 id="otherBuses"></h4>
-    </div>
-</blockquote>
-
+}
 @section Scripts
 {
-    @Scripts.Render("~/Scripts/Index.js")
+    @Scripts.Render("~/Scripts/AdminEdit.js")
 }

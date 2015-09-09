@@ -9,5 +9,26 @@
 {
     color:RGB(22, 141, 226);
     text-align:left;
+    margin-left:15px;
     margin-top:5px;
+}
+
+#otherBusContainer h4
+{
+    font-weight:bold;
+    margin-right:15px;
+}
+
+#otherBusContainer h4:first-child
+{
+    color:RGB(22, 141, 226);
+    text-align:right;
+    margin-top:5px;
+    margin-right:15px;
+}
+
+
+#otherBuses span
+{
+  cursor:pointer
 }

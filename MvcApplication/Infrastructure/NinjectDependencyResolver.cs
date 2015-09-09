@@ -6,6 +6,8 @@ using System.Web.Mvc;
 using Ninject;
 using Domain.Abstract;
 using Domain.Concrete;
+using MvcApplication.Abstract;
+using MvcApplication.Concrete;
 
 namespace MvcApplication.Infrastructure
 {
@@ -32,6 +34,7 @@ namespace MvcApplication.Infrastructure
       private void AddBindings()
       {
          kernel.Bind<IStopsRepository>().To<EFStopsRepository>();
+         kernel.Bind<IAuthProvider>().To<FormAuthProvider>();
       }
 
    }

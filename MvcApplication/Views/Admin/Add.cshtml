@@ -2,8 +2,8 @@
     ViewBag.Title = "Add";
 }
 
-<p class="bg-success">@ViewBag.Success</p>
-<p class="bg-danger">@ViewBag.Erors</p>
+<p class="bg-success">@TempData["Success"]</p>
+<p class="bg-danger">@TempData["Erors"]</p>
 
 <blockquote >
     @using (Html.BeginForm("Add", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
