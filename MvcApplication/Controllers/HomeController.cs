@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Domain.Abstract;
 using MvcApplication.Models;
+using MvcApplication.Concrete;
 
 
 namespace MvcApplication.Controllers
@@ -54,7 +55,9 @@ namespace MvcApplication.Controllers
 
           //получение времени остановок
           IEnumerable<string> result = repository.getItems(stopName, busNumber, endStopName, days);
-          return Json(result, JsonRequestBehavior.AllowGet);
+          var nearestTime = Stops.getNearestTime(result);
+          var model = new { stops = result, nearestStop = nearestTime };
+          return Json(model, JsonRequestBehavior.AllowGet);
        }
 
        public JsonResult GetOtherBuses(string stopName, string busNumber)

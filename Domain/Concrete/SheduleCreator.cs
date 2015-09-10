@@ -95,6 +95,11 @@ namespace Domain.Concrete
             temp = double.Parse(value);
             hours = (int)(temp * 24);
             minutes = (int)Math.Round((((temp * 24) - (double)hours)*60));
+               if(minutes >= 60)
+               {
+                  hours += 1;
+                  minutes -= 60;
+               }
             answer = string.Format("{0:00}", hours) + string.Format(":{0:00}", minutes);
             result.Append(answer + " ");
             }

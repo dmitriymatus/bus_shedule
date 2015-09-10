@@ -20,6 +20,9 @@ function selectNumber()
         if (document.getElementById("stopsContainer").hasAttribute("hidden") != true) {
             document.getElementById("stopsContainer").setAttribute("hidden", "")
         }
+        if (document.getElementById("nearestTimeContainer").hasAttribute("hidden") != true) {
+            document.getElementById("nearestTimeContainer").setAttribute("hidden", "")
+        }
     }
 }
 function getData(result) {
@@ -31,10 +34,13 @@ function getData(result) {
     $("#days").text("");
     $("#days").append("<option>" + "</option>")
     if (document.getElementById("stopsContainer").hasAttribute("hidden") != true) {
-        document.getElementById("stopsContainer").setAttribute("hidden");
+        document.getElementById("stopsContainer").setAttribute("hidden", "");
     }
     if (document.getElementById("otherBusContainer").hasAttribute("hidden") != true) {
-        document.getElementById("otherBusContainer").setAttribute("hidden");
+        document.getElementById("otherBusContainer").setAttribute("hidden", "");
+    }
+    if (document.getElementById("nearestTimeContainer").hasAttribute("hidden") != true) {
+        document.getElementById("nearestTimeContainer").setAttribute("hidden", "");
     }
     $.each(result.Stops, function (i) { $("#stopName").append("<option>" + this + "</option>") })
     stopLoadingAnimation();
@@ -54,22 +60,31 @@ function selectAll() {
         if (document.getElementById("stopsContainer").hasAttribute("hidden") == true) {
             document.getElementById("stopsContainer").removeAttribute("hidden");
         }
+        if (document.getElementById("nearestTimeContainer").hasAttribute("hidden") == true) {
+            document.getElementById("nearestTimeContainer").removeAttribute("hidden");
+        }
     }
     else {
         if (document.getElementById("stopsContainer").hasAttribute("hidden") != true) {
-            document.getElementById("stopsContainer").setAttribute("hidden");
+            document.getElementById("stopsContainer").setAttribute("hidden", "");
+        }
+        if (document.getElementById("nearestTimeContainer").hasAttribute("hidden") != true) {
+            document.getElementById("nearestTimeContainer").setAttribute("hidden", "");
         }
         $("#nodes").text("");
+        $("#nearestTime").text("");
     }
 
 }
 
 function GetNodes(nodes) {
     $("#nodes").text("");
-    if (nodes.length != 0) {
-        $.each(nodes, function (i) { $("#nodes").append("<span class='breaks'>" + this + "</span> ") })
+    if (nodes.stops.length != 0) {
+        $.each(nodes.stops, function (i) { $("#nodes").append("<span class='breaks'>" + this + "</span> ") })
+        $("#nearestTime").append(nodes.nearestStop)
     }
     else {
+        $("#nearestTime").append("<span class='breaks'> Нет рейсов</span>")
         $("#nodes").append("<span class='breaks'> Нет рейсов</span>")
     }
     stopLoadingAnimation();
@@ -188,6 +203,9 @@ function GetNewData(result) {
     }
     if (document.getElementById("otherBusContainer").hasAttribute("hidden") != true) {
         document.getElementById("otherBusContainer").setAttribute("hidden", "")
+    }
+    if (document.getElementById("nearestTimeContainer").hasAttribute("hidden") != true) {
+        document.getElementById("nearestTimeContainer").setAttribute("hidden", "")
     }
     $.each(result.Stops, function (i) { $("#stopName").append("<option>" + this + "</option>") })
     var ttt = document.getElementById("stopName");
