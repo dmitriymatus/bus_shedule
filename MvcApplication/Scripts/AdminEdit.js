@@ -86,6 +86,11 @@ function GetendStops(stops) {
     $("#finalStop").text("");
     $("#finalStop").append("<option>" + "</option>")
     $.each(stops, function (i) { $("#finalStop").append("<option>" + this + "</option>") })
+
+    var finalStop = document.getElementById("finalStop");
+    finalStop.options.selectedIndex = 1;
+    selectFinalStop();
+
     stopLoadingAnimation();
 }
 
@@ -105,7 +110,16 @@ function selectendStop() {
 function GetDays(days) {
     $("#days").text("");
     $("#days").append("<option>" + "</option>")
-    $.each(days, function (i) { $("#days").append("<option>" + this + "</option>") })
+    $.each(days.result, function (i) { $("#days").append("<option>" + this + "</option>") })
+
+    var alldays = document.getElementById("days");
+
+    for (i = 0; i < alldays.length; i++) {
+        if (alldays.options[i].value == days.now) {
+            alldays.options.selectedIndex = i;
+        }
+    }
+    selectAll();
     stopLoadingAnimation();
 }
 //---------------------------------------------------------------------------

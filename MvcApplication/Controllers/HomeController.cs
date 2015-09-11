@@ -55,8 +55,10 @@ namespace MvcApplication.Controllers
        {
           //получение дней
           var result = repository.GetDays(stopName, busNumber, endStop);
+          var now = Days.GetDays(result);
 
-          return Json(result, JsonRequestBehavior.AllowGet);
+          var model = new { result = result, now = now };
+          return Json(model, JsonRequestBehavior.AllowGet);
        }
 
        [OutputCache(Duration = 1, NoStore = true)]
