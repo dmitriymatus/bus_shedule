@@ -7,7 +7,7 @@ function selectNumber()
     if (busNumber.value != "") {
         startLoadingAnimation();
         $("#nodes").text("");
-        $.getJSON("/Home/getStopsNames" + "?busNumber=" + encodeURIComponent(busNumber.value), null, getData);
+        $.getJSON("/Home/GetStopsNames" + "?busNumber=" + encodeURIComponent(busNumber.value), null, getData);
     }
     else {
         $("#nodes").text("");
@@ -42,7 +42,7 @@ function getData(result) {
     if (document.getElementById("nearestTimeContainer").hasAttribute("hidden") != true) {
         document.getElementById("nearestTimeContainer").setAttribute("hidden", "");
     }
-    $.each(result.Stops, function (i) { $("#stopName").append("<option>" + this + "</option>") })
+    $.each(result, function (i) { $("#stopName").append("<option>" + this + "</option>") })
     stopLoadingAnimation();
     //$.each(result.Days, function (i) { $("#days").append("<option>" + this + "</option>") })
 }
@@ -56,7 +56,7 @@ function selectAll() {
 
     if (busNumber.value != "" & stopName.value != "" & endStopName.value != "" & days.value != "") {
         startLoadingAnimation();
-        $.getJSON("/Home/getStops" + "?busNumber=" + encodeURIComponent(busNumber.value) + "&stopName=" + encodeURIComponent(stopName.value) + "&endStopName=" + encodeURIComponent(endStopName.value) + "&days=" + encodeURIComponent(days.value), null, GetNodes);
+        $.getJSON("/Home/GetStops" + "?busNumber=" + encodeURIComponent(busNumber.value) + "&stopName=" + encodeURIComponent(stopName.value) + "&endStopName=" + encodeURIComponent(endStopName.value) + "&days=" + encodeURIComponent(days.value), null, GetNodes);
         if (document.getElementById("stopsContainer").hasAttribute("hidden") == true) {
             document.getElementById("stopsContainer").removeAttribute("hidden");
         }
@@ -179,7 +179,7 @@ function GetDays(days)
 function selectOtherBusOnThisStop(_busNumber) {
     startLoadingAnimation();
     var val = this.value;
-    $.getJSON("/Home/getStopsNames" + "?busNumber=" + encodeURIComponent(_busNumber), null, GetNewData);
+    $.getJSON("/Home/GetStopsNames" + "?busNumber=" + encodeURIComponent(_busNumber), null, GetNewData);
     var busNumber = document.getElementById("busNumber");
     for (i = 0; i < busNumber.length; i++) {
         if (busNumber.options[i].value == _busNumber) {
@@ -207,7 +207,7 @@ function GetNewData(result) {
     if (document.getElementById("nearestTimeContainer").hasAttribute("hidden") != true) {
         document.getElementById("nearestTimeContainer").setAttribute("hidden", "")
     }
-    $.each(result.Stops, function (i) { $("#stopName").append("<option>" + this + "</option>") })
+    $.each(result, function (i) { $("#stopName").append("<option>" + this + "</option>") })
     var ttt = document.getElementById("stopName");
     for (i = 0; i < ttt.length; i++) {
         var eee = ttt.options[i].value;

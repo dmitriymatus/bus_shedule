@@ -10,11 +10,12 @@ namespace Domain.Abstract
    public interface IStopsRepository
    {
       IEnumerable<busStop> Stops { get; }
-      IEnumerable<string> getStops(string busNumber);
-      IEnumerable<string> getOtherBuses(string stopName, string busNumber);
-      IEnumerable<string> getFinalStops(string stopName, string busNumber);
-      IEnumerable<string> getDays(string stopName, string busNumber, string endStop);
-      IEnumerable<string> getItems(string stopName, string busNumber, string endStop, string days);
+      IEnumerable<string> GetBuses();
+      IEnumerable<string> GetStops(string busNumber);
+      IEnumerable<string> GetOtherBuses(string stopName, string busNumber);
+      IEnumerable<string> GetFinalStops(string stopName, string busNumber);
+      IEnumerable<string> GetDays(string stopName, string busNumber, string endStop);
+      IEnumerable<string> GetItems(string stopName, string busNumber, string endStop, string days);
       void AddStops(IEnumerable<busStop> stops);
       void AddStop(busStop stop);
       bool Contain(busStop stop);

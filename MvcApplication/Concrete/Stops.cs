@@ -7,9 +7,11 @@ namespace MvcApplication.Concrete
 {
    public static class Stops
    {
-      public static string getNearestTime(IEnumerable<string> stops)
+      public static string GetNearestTime(IEnumerable<string> stops)
       {
-         DateTime time = DateTime.Now;
+                 
+         var time = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.CreateCustomTimeZone("Brest Standard Time", TimeSpan.FromHours(3), "BrestTimeZone", "wintertime"));
+
          List<DateTime> items = new List<DateTime>();
          foreach(string stop in stops)
          {

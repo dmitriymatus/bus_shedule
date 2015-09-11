@@ -4,7 +4,7 @@ function selectNumber() {
     if (busNumber.value != "") {
         startLoadingAnimation();
         $("#stops").text("");
-        $.getJSON("/Home/getStopsNames" + "?busNumber=" + encodeURIComponent(busNumber.value), null, getData);
+        $.getJSON("/Home/GetStopsNames" + "?busNumber=" + encodeURIComponent(busNumber.value), null, getData);
     }
     else {
         $("#stops").text("");
@@ -40,7 +40,7 @@ function selectAll() {
 
     if (busNumber.value != "" & stopName.value != "" & endStopName.value != "" & days.value != "") {
         startLoadingAnimation();
-        $.getJSON("/Home/getStops" + "?busNumber=" + encodeURIComponent(busNumber.value) + "&stopName=" + encodeURIComponent(stopName.value) + "&endStopName=" + encodeURIComponent(endStopName.value) + "&days=" + encodeURIComponent(days.value), null, GetNodes);
+        $.getJSON("/Home/GetStops" + "?busNumber=" + encodeURIComponent(busNumber.value) + "&stopName=" + encodeURIComponent(stopName.value) + "&endStopName=" + encodeURIComponent(endStopName.value) + "&days=" + encodeURIComponent(days.value), null, GetNodes);
         if (document.getElementById("stopsContainer").hasAttribute("hidden") == true) {
             document.getElementById("stopsContainer").removeAttribute("hidden");
         }

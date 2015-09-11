@@ -72,25 +72,18 @@ namespace MvcApplication.Controllers
         [HttpGet]
         public ActionResult AddStop()
         {
+           var model = CreateViewModel();
 
-           var numbers = repository.Stops.GroupBy(x => x.busNumber).Select(group => group.First().busNumber).ToList();
-           var stopNames = repository.Stops.GroupBy(x => x.stopName).Select(group => group.First().stopName).OrderBy(x => x).ToList();
-           var finalStops = repository.Stops.GroupBy(x => x.finalStop).Select(group => group.First().finalStop).OrderBy(x => x).ToList();
-           var days = repository.Stops.GroupBy(x => x.days).Select(group => group.First().days).OrderBy(x => x).ToList();
-           AdminAddViewModel model = new AdminAddViewModel { Numbers = numbers, StopNames = stopNames, Days = days, FinalStops = finalStops, Stop = new busStop()};
            return View(model);
         }
 
        [HttpPost]
        public ActionResult AddStop(busStop stop)
        {
-          var numbers = repository.Stops.GroupBy(x => x.busNumber).Select(group => group.First().busNumber).ToList();
-          var stopNames = repository.Stops.GroupBy(x => x.stopName).Select(group => group.First().stopName).OrderBy(x => x).ToList();
-          var finalStops = repository.Stops.GroupBy(x => x.finalStop).Select(group => group.First().finalStop).OrderBy(x => x).ToList();
-          var days = repository.Stops.GroupBy(x => x.days).Select(group => group.First().days).OrderBy(x => x).ToList();
           if (!ModelState.IsValid)
           {
-             AdminAddViewModel model = new AdminAddViewModel { Numbers = numbers, StopNames = stopNames, Days = days, FinalStops = finalStops, Stop = stop };
+             var model = CreateViewModel();
+             model.Stop = stop;
              return View(model);
           }
 
@@ -99,13 +92,15 @@ namespace MvcApplication.Controllers
             if (matches.Count == 0)
             {
                ModelState.AddModelError("", "Неправильно заполнено расписание");
-               AdminAddViewModel model = new AdminAddViewModel { Numbers = numbers, StopNames = stopNames, Days = days, FinalStops = finalStops, Stop = stop };
+               var model = CreateViewModel();
+               model.Stop = stop;
                return View(model);
             }
             else if (repository.Contain(stop))
             {
                ModelState.AddModelError("", "Запись уже существует");
-               AdminAddViewModel model = new AdminAddViewModel { Numbers = numbers, StopNames = stopNames, Days = days, FinalStops = finalStops, Stop = stop };
+               var model = CreateViewModel();
+               model.Stop = stop;
                return View(model);
             }
             else
@@ -123,13 +118,18 @@ namespace MvcApplication.Controllers
           return RedirectToAction("AddStop");
        }
 
-
        [HttpGet]
        [OutputCache(Duration = 1, NoStore = true)]
        public ActionResult Edit()
        {          
-          IEnumerable<string> buses = repository.Stops.GroupBy(x => x.busNumber).Select(group => group.First().busNumber).ToList();
-          HomeIndexViewModel model = new HomeIndexViewModel { busNumber = buses, stopName = new List<string>(), endStop = new List<string>(), days = new List<string>() };
+          var buses = repository.GetBuses();
+          HomeIndexViewModel model = new HomeIndexViewModel 
+          { 
+             busNumber = buses,
+             stopName = new List<string>(),
+             endStop = new List<string>(),
+             days = new List<string>() 
+          };
           return View(model);
        }
 
@@ -152,8 +152,14 @@ namespace MvcApplication.Controllers
        [OutputCache(Duration = 1, NoStore = true)]
        public ActionResult Delete()
        {
-          IEnumerable<string> buses = repository.Stops.GroupBy(x => x.busNumber).Select(group => group.First().busNumber).ToList();
-          HomeIndexViewModel model = new HomeIndexViewModel { busNumber = buses, stopName = new List<string>(), endStop = new List<string>(), days = new List<string>() };
+          var buses = repository.GetBuses();
+          HomeIndexViewModel model = new HomeIndexViewModel 
+          { 
+             busNumber = buses,
+             stopName = new List<string>(),
+             endStop = new List<string>(),
+             days = new List<string>() 
+          };
           return View(model);
        }
 
@@ -174,6 +180,24 @@ namespace MvcApplication.Controllers
           repository.DeleteAll();
           TempData["Success"] = "Записи удалены";
           return RedirectToAction("Index");
+       }
+
+       [NonAction]
+       private AdminAddViewModel CreateViewModel()
+       {
+          var numbers = repository.Stops.Select(x => x.busNumber).Distinct();
+          var stopNames = repository.Stops.Select(x => x.stopName).Distinct().OrderBy(x => x);
+          var finalStops = repository.Stops.Select(x => x.finalStop).Distinct().OrderBy(x => x);
+          var days = repository.Stops.Select(x => x.days).Distinct().OrderBy(x => x);
+          AdminAddViewModel model = new AdminAddViewModel
+          {
+             Numbers = numbers,
+             StopNames = stopNames,
+             Days = days,
+             FinalStops = finalStops,
+             Stop = new busStop()
+          };
+          return model;
        }
 
 

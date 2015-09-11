@@ -15,23 +15,25 @@ namespace Domain.Concrete
 {
    public static class SheduleCreator
    {
+      const int dataStart = 4;
       public static IEnumerable<busStop> Create(string fileName)
       {
+
          List<StringBuilder> rows = new List<StringBuilder>();
          FileStream stream = File.Open(fileName, FileMode.Open, FileAccess.Read);
 
          IExcelDataReader excelReader = ExcelReaderFactory.CreateBinaryReader(stream);
          DataSet result = excelReader.AsDataSet();
          DataTable table = result.Tables[0];
-         int k = 0;
-         for(int i = 4; i< table.Rows.Count; i++)
+
+         for (int i = dataStart; i < table.Rows.Count; i++)
          {
             if (table.Rows[i][0].ToString().StartsWith("№") == true)
             {
             StringBuilder item = new StringBuilder();           
             for (int j = 0; j < table.Columns.Count; j++ )
             {
-               if ((table.Rows[i][j].ToString() as string) != null && table.Rows[i][0].ToString().StartsWith("№"))
+               if (table.Rows[i][j].ToString() != null && table.Rows[i][0].ToString().StartsWith("№"))
                {
                   item.Append(table.Rows[i][j].ToString() + "|");
                }
@@ -48,7 +50,6 @@ namespace Domain.Concrete
 
       private static IEnumerable<busStop> Parse(List<StringBuilder> rows)
       {
-         List<busStop> result = new List<busStop>();
          string busNumber;
          string stopName;
          string finalStop;
@@ -60,53 +61,56 @@ namespace Domain.Concrete
 
          foreach(StringBuilder row in rows)
          {
-            try
+            cols = row.ToString().Split(separator, StringSplitOptions.None);
+            if (!String.IsNullOrEmpty(cols[0] as string) && !String.IsNullOrEmpty(cols[1] as string) && !String.IsNullOrEmpty(cols[2] as string) && !String.IsNullOrEmpty(cols[3] as string))
             {
-               cols = row.ToString().Split(separator, StringSplitOptions.None);
                busNumber = cols[0].Remove(0, 1);
                stopName = cols[3];
                finalStop = cols[2];
                days = cols[1] == "Р" ? "Рабочие" : cols[1] == "В" ? "Выходные" : cols[1] == "Р,В" ? "Ежедневно" : cols[1];
                stops = Convert(cols.Skip(7).Take(cols.Count() - 11));
-               result.Add(new busStop { busNumber = busNumber, stopName = stopName, finalStop = finalStop, days = days, stops = stops });
-            }
-            catch
-            {
-
+               yield return new busStop { busNumber = busNumber, stopName = stopName, finalStop = finalStop, days = days, stops = stops };
             }
          }
-
-         return result;
       }
 
 
       private static string Convert(IEnumerable<string> values)
       {
-         StringBuilder result = new StringBuilder();
-         double temp;
-         int hours;
-         int minutes;
-         string answer;
+         return String.Join(" ", values.Where(x => !String.IsNullOrEmpty(x)).Select(x => Helper(x)));
+      }
 
-         foreach(string value in values)
+      private static string Helper(string value)
+      {
+         DateTime result;
+         if (DateTime.TryParse(value, out result))
          {
-            if(value != "")
+            return result.ToString("HH:mm");
+         }
+         else
+         {
+            double temp;
+            if (double.TryParse(value, out temp))
             {
-            temp = double.Parse(value);
-            hours = (int)(temp * 24);
-            minutes = (int)Math.Round((((temp * 24) - (double)hours)*60));
-               if(minutes >= 60)
+               var hours = (int)(temp * 24);
+               var minutes = (int)Math.Round((((temp * 24) - (double)hours) * 60));
+               if (minutes >= 60)
                {
                   hours += 1;
                   minutes -= 60;
                }
-            answer = string.Format("{0:00}", hours) + string.Format(":{0:00}", minutes);
-            result.Append(answer + " ");
+               if (hours >= 24)
+               {
+                  hours -= 24;
+               }
+               return string.Format("{0:00}:{1:00}", hours, minutes);
+            }
+            else
+            {
+               return "empty";
             }
          }
-         return result.ToString();
       }
-
 
    }
 }
