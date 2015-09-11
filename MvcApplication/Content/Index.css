@@ -14,17 +14,15 @@
     margin-top:5px;
 }
 
-#stopsContainer h3
-{
-    margin-right:10px;
-}
 
-#otherBusContainer h4
+#nearestTime, #nodes, #otherBuses
 {
     font-weight:bold;
     margin-right:15px;
     margin-left:15px;
 }
+
+
 
 #otherBusContainer h4:first-child
 {
@@ -35,12 +33,6 @@
     margin-left:20px;
 }
 
-#nearestTimeContainer h3
-{
-    font-weight:bold;
-    margin-right:15px;
-    margin-left:15px;
-}
 
 #nearestTimeContainer h3:first-child
 {

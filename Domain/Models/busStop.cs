@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Models
 {
-   public class busStop
+   public class busStop : IEquatable<busStop>
    {
       public int Id { get; set; }
       [Required]
@@ -25,5 +25,24 @@ namespace Domain.Models
       [Required]
       [Display(Name = "Дни")]
       public string days { get; set; }
+
+      public bool Equals(busStop other)
+      {
+         if (other.busNumber == busNumber)
+         {
+            return true;
+         }
+         else
+         {
+            return false;
+         }
+      }
+
+      public override int GetHashCode()
+      {
+         return this.busNumber.GetHashCode();
+      }
+
+
    }
 }
