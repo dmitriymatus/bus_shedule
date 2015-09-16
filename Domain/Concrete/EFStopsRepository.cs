@@ -22,23 +22,18 @@ namespace Domain.Concrete
       public IEnumerable<string> GetBuses()
       {
          //получение номеров автобусов
-         //return context.Stops.OrderBy(x => x.Id)
-         //                    .Select(x => x.busNumber)
-         //                    .ToList()
-         //                    .Distinct();         
-
-         return context.Stops.ToList()
-                             .Distinct()
-                             .OrderBy(x => x.Id)                             
-                             .Select(x => x.busNumber);    
+         return context.Stops.AsEnumerable()
+                             .OrderBy(x => x.Id)
+                             .Select(x => x.busNumber)
+                             .Distinct();   
       }
 
       public IEnumerable<string> GetStops(string busNumber)
       {
          //получение названий остановок
-         return context.Stops.Where(x => x.busNumber == busNumber)
+         return context.Stops.AsEnumerable()
+                             .Where(x => x.busNumber == busNumber)
                              .Select(x => x.stopName)
-                             .ToList()
                              .Distinct();          
       }
 
