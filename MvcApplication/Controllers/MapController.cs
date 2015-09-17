@@ -10,6 +10,7 @@ using MvcApplication.Concrete;
 
 namespace MvcApplication.Controllers
 {
+    [Authorize]
     public class MapController : Controller
     {
        IStopsRepository repository;
