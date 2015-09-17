@@ -28,6 +28,15 @@ namespace Domain.Concrete
                              .Distinct();   
       }
 
+      public IEnumerable<string> GetAllStops()
+      {
+         //получение названий всех остановок
+         return context.Stops.AsEnumerable()
+                    .OrderBy(x => x.stopName)
+                    .Select(x => x.stopName)
+                    .Distinct(); 
+      }
+
       public IEnumerable<string> GetStops(string busNumber)
       {
          //получение названий остановок

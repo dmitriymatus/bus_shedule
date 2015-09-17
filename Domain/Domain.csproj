@@ -58,6 +58,7 @@
     <Compile Include="Concrete\SheduleCreator.cs" />
     <Compile Include="Concrete\SheduleDbContext.cs" />
     <Compile Include="Models\busStop.cs" />
+    <Compile Include="Models\Station.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,30 @@
+﻿@model IEnumerable<string>
+@{
+    ViewBag.Title = "Index";
+}
+<script src="http://maps.google.com/maps/api/js?sensor=true&libraries=geometry" type="text/javascript"></script>
+
+<blockquote class="blockquote-reverse">
+    <div class="row">
+        <div class="col-sm-12">
+            <h4 class="text-muted">Выберите остановку куда нужно доехать (или отметьте на карте)</h4>
+                @Html.DropDownList("stopName",new SelectList(Model),"",new {@class="form-control",onchange="selectStop();"}) 
+        </div>     
+    </div>
+</blockquote>
+
+
+<blockquote>
+    <div id="info">
+
+    </div>
+</blockquote>
+
+<blockquote class="blockquote-reverse">
+<div id="canvas" style="height: 480px; width:auto;"></div>
+</blockquote>
+
+@section scripts 
+{
+    @Scripts.Render("~/Scripts/MapScripts/Index.js")
+}
