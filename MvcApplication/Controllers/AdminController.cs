@@ -10,6 +10,7 @@ using MvcApplication.Models;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Text;
+using MvcApplication.Models.Admin;
 
 namespace MvcApplication.Controllers
 {
@@ -34,11 +35,17 @@ namespace MvcApplication.Controllers
         }
 
         [HttpPost]
-        public ActionResult Add(HttpPostedFileBase file)
+        public ActionResult Add(AddFileViewModel model)
         {
-           if (file != null)
+
+           if (!ModelState.IsValid)
            {
-              if (file.ContentType != "application/vnd.ms-excel")
+              return View(model);
+           }
+
+           if (model.file != null)
+           {
+              if (model.file.ContentType != "application/vnd.ms-excel")
               {
                  TempData["Erors"] = "Неправильное расширение файла, загрузите файл с расширением xls";
                  return View();
@@ -48,7 +55,7 @@ namespace MvcApplication.Controllers
                  try
                  {
                     var fileName = this.HttpContext.Request.MapPath("~/Content/shedule.xls");
-                    file.SaveAs(fileName);
+                    model.file.SaveAs(fileName);
 
                     IEnumerable<busStop> answer = SheduleCreator.Create(fileName);
                     repository.DeleteAll();

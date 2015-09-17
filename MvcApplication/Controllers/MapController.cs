@@ -104,7 +104,6 @@ namespace MvcApplication.Controllers
 
         public ActionResult Index()
         {
-           //var model = repository.GetAllStops();
            var model = stations.OrderBy(x => x.Name).Select(x => x.Name).Distinct();
             return View(model);
         }
@@ -112,8 +111,6 @@ namespace MvcApplication.Controllers
 
         public JsonResult GetData()
         {
-           
-
            return Json(stations, JsonRequestBehavior.AllowGet);
         }
 
